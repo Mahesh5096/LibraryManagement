@@ -1,0 +1,19 @@
+<template>
+    <lightning-card>
+        <h1 slot="title">Borrowed Book for {loggedInUserName}</h1>
+        <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color: rgb(22, 50, 92);" >
+            <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>
+            </div>
+        <lightning-datatable 
+            data={record} columns={columns} key-field="Id" 
+            max-row-selection="1"
+            onrowselection={handleRowSlect}>
+        </lightning-datatable>
+        <template if:false={recordLength}>
+            <h1 style="text-align: center; font-weight: bold;">No Books Borrowed!! Keep Learning</h1>
+        </template> 
+        <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color: rgb(22, 50, 92);" >
+        <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>
+        </div>
+    </lightning-card>
+</template>

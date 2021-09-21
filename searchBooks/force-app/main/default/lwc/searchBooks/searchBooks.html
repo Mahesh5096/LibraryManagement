@@ -1,0 +1,45 @@
+<template>
+    <lightning-card  title="Search Books" icon-name="standard:search" >
+        <div style="text-align: center;">
+        <h1 style="font-weight: bold;">Hi {loggedInUserName}</h1>
+        </div>
+        <br>
+        <template if:true={isLibrarin}>
+            <lightning-radio-group slot="actions" name="radioGroup" label="Search By" 
+                options={options1} value={value} type="button" onchange={handleChange} required>
+            </lightning-radio-group>
+        </template>
+        <template if:false={isLibrarin}>
+            <lightning-radio-group slot="actions" name="radioGroup" label="Search By" 
+                options={options} value={value} type="button" onchange={handleChange} required>
+            </lightning-radio-group>
+        </template>
+        <lightning-input slot="actions" name="search" onchange={handleSearch} placeholder="Search">
+        </lightning-input>
+        <template if:false={isLibrarin}>
+            <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color:rgb(22, 50, 92);" >
+                <lightning-button-group >
+                    <lightning-button  label="Borrow"  onclick={handleBorrowClick} variant="inverse" ></lightning-button>
+                    <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>
+                </lightning-button-group>
+            </div>
+        </template>
+        <lightning-datatable 
+            data={record} columns={columns} key-field="Name" sorted-by={sortBy} 
+            sorted-direction={sortDirection} 
+            max-row-selection="1"
+            onsort={doSorting} onrowselection={handleRowSlect}>
+        </lightning-datatable>
+        <template if:false={recordLength}>
+            <h1 style="text-align: center; font-weight: bold;">No Results Found</h1>
+        </template> 
+        <template if:false={isLibrarin}>
+            <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color: rgb(22, 50, 92);" >
+                <lightning-button-group >
+                    <lightning-button  label="Borrow"  onclick={handleBorrowClick} variant="inverse" ></lightning-button>
+                    <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>
+                </lightning-button-group>
+            </div>
+        </template>
+    </lightning-card>
+</template>

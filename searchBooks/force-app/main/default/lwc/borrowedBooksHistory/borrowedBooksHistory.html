@@ -1,0 +1,13 @@
+<template>
+    <lightning-card>
+        <h1 slot="title">Borrowed Book History for {loggedInUserName}</h1>
+        <lightning-input slot="actions" name="search" onchange={handleSearch} placeholder="Search"></lightning-input>
+        <lightning-datatable
+        data={record} columns={columns} key-field="Name" sorted-by={sortBy} 
+            sorted-direction={sortDirection} hide-checkbox-column="true" onsort={doSorting} >
+        </lightning-datatable>
+        <template if:false={recordLength}>
+            <h1 style="text-align: center; font-weight: bold;">No Books Borrowed!! Keep Learning</h1>
+        </template> 
+    </lightning-card>
+</template>
