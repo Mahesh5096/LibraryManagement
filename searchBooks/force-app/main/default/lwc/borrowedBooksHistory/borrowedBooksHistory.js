@@ -1,5 +1,5 @@
 import { LightningElement,wire } from 'lwc';
-import getBorrowedBooks from '@salesforce/apex/customSearchSobjectLWC.getBorrowedBooks';
+//import getBorrowedBooks from '@salesforce/apex/customSearchSobjectLWC.getBorrowedBooks';
 import USER_ID from '@salesforce/user/Id';
 import { getRecord } from 'lightning/uiRecordApi';
 import USER_NAME from '@salesforce/schema/User.Name';
@@ -10,17 +10,13 @@ import getBookByIdSOSL from '@salesforce/apex/customSearchSobjectLWC.getBookById
 const columns = [
     {label: 'Book Id', fieldName: 'Book_Id__c', type: 'text', sortable: "true"},
     {label: 'Book Name', fieldName: 'Book_Name__c', type: 'text', sortable:true, initialWidth: 400},
-    //{label: 'Book Status', fieldName: 'Book_Status__c', type: 'text', sortable: "true"},
     {label: 'Author', fieldName: 'Author__c', type: 'text', sortable: "true"},
-    // {label: 'Category', fieldName: 'Category__c', type: 'text', sortable: "true"},
-    // {label: 'Genres', fieldName: 'Genres__c', type: 'text', sortable: "true"},
-    //{label: 'Borrowed', fieldName: 'isBorrowed__c'}
     {label: 'Borrowed Date', fieldName: 'Borrowed_date__c', type: 'text', sortable: "true"},
     {label: 'Returned date', fieldName: 'Returned_date__c', type: 'text', sortable: "true"}
 ];
 
 export default class BorrowedBooksHistory extends LightningElement {
-    searchKey;
+    searchKey='';
     loggedInUserId=USER_ID;
     loggedInUserName;
     columns = columns;
@@ -40,34 +36,38 @@ export default class BorrowedBooksHistory extends LightningElement {
     }) {
         if (error) {
            this.error = error ;
+           console.log('-->error');
            console.log(this.error); 
+
         } else if (data) {
+            console.log('--->id'+USER_ID);
             this.loggedInUserName = data.fields.Name.value;
         }
     }
 
-    @wire(getBorrowedBooks,{userId:'$loggedInUserId'}) wiredBorrowedBooks(result){
+    get dynamicGreeting(){
+        if(this.loggedInUserName!=undefined){
+        return `Hello ${this.loggedInUserName.toUpperCase()}!`;
+        }
+    }
+
+    @wire(getBookByIdSOSL,{userId:'$loggedInUserId',searchKey:'$searchKey'}) wiredbooks(result){
         this.wireddataResult = result;
         if(result.data){
             this.record = result.data;
             this.recordLength = this.record.length;
         }
+        console.log('-->wire')
+        console.log(result.data);
         return refreshApex(this.wireddataResult);
     }
-
+    
     handleSearch(event){
-        this.searchKey = event.target.value;
-            getBookByIdSOSL({
-                searchKey:this.searchKey
-            })
-            .then(result=>{
-                this.record = result;
-                this.recordLength = this.record.length;
-            })
-            .catch(error=>{
-                this.error = error.message
-                console.log(this.error);
-            })
+        window.clearTimeout(this.delayTimeout);
+        const searchKey = event.target.value;
+        this.delayTimeout = setTimeout(() => {
+            this.searchKey = searchKey;
+        }, 300);
     }
    
     doSorting(event){
@@ -92,18 +92,45 @@ export default class BorrowedBooksHistory extends LightningElement {
         this.recordLength = this.record.length;
     }
 
-    connectedCallback(){
-        console.log(this.loggedInUserId);
-        getBorrowedBooks({
-            userId:this.loggedInUserId
-        })
-        .then(result=>{
-            this.record = result;
-            this.recordLength = this.record.length;
-        })
-        .catch(error=>{
-            this.error = error.message
-            console.log(this.error);
-        })
-    }
+//#region  commanted line
+
+    //     connectedCallback(){
+    //         console.log(this.loggedInUserId);
+    //         getBorrowedBooks({
+    //             userId:this.loggedInUserId
+    //         })
+    //         .then(result=>{
+    //             this.record = result;
+    //             this.recordLength = this.record.length;
+    //         })
+    //         .catch(error=>{
+    //             this.error = error.message
+    //             console.log(this.error);
+    //         })
+    //     }
+
+    // @wire(getBorrowedBooks,{userId:'$loggedInUserId'}) wiredBorrowedBooks(result){
+    //     this.wireddataResult = result;
+    //     if(result.data){
+    //         this.record = result.data;
+    //         this.recordLength = this.record.length;
+    //     }
+    //     return refreshApex(this.wireddataResult);
+    // }
+
+    // this.searchKey = 
+        //     getBookByIdSOSL({
+        //         searchKey:this.searchKey
+        //     })
+        //     .then(result=>{
+        //         this.record = result;
+        //         this.recordLength = this.record.length;
+        //     })
+        //     .catch(error=>{
+        //         this.error = error.message
+        //         console.log(this.error);
+        //     })
+
+//#endregion
+
 }
