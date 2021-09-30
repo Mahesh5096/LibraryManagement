@@ -1,6 +1,6 @@
 import { LightningElement,wire } from 'lwc';
 import getBookById from '@salesforce/apex/customSearchSobjectLWC.getBookById';
-import getBooks from '@salesforce/apex/customSearchSobjectLWC.getBooks';
+//import getBooks from '@salesforce/apex/customSearchSobjectLWC.getBooks';
 import insertBorrowedBooks from '@salesforce/apex/customSearchSobjectLWC.insertBorrowedBooks';
 import updateBook from '@salesforce/apex/customSearchSobjectLWC.updateBook';
 import getBorrowedCount from '@salesforce/apex/customSearchSobjectLWC.getBorrowedCount';
@@ -24,6 +24,7 @@ const columns = [
 
 export default class SearchBooks extends LightningElement {
 
+    //for member login
     get options() {
         return [
             { label: 'Id', value: 'Name' },
@@ -33,6 +34,7 @@ export default class SearchBooks extends LightningElement {
         ];
     }
 
+    //for librarian login
     get options1(){
         return[
             { label: 'Id', value: 'Name' },
@@ -79,7 +81,8 @@ export default class SearchBooks extends LightningElement {
     }) {
         if (error) {
            this.error = error ;
-           console.log(this.error); 
+           console.log(this.error);
+            
         } else if (data) {
             this.loggedInUserName = data.fields.Name.value;
         }
@@ -87,7 +90,7 @@ export default class SearchBooks extends LightningElement {
 //#endregion
 
 //#region Get the Books using refresh apex
-    @wire(getBooks) wiredBooks(result){
+    @wire(getBookById,{searchBy:'$value',searchKey:'$searchValue'}) wiredBooks(result){
         this.wireddataResult = result;
         console.log(this.wireddataResult)
         if(result.data){
@@ -97,6 +100,12 @@ export default class SearchBooks extends LightningElement {
         return refreshApex(this.wireddataResult);
     }
 //#endregion
+
+get dynamicGreetings(){
+    if(this.loggedInUserName!=undefined){
+        return `Hello ${this.loggedInUserName.toUpperCase()}!`;
+    }
+}
 
 //#region Success Toast 
     showSuccessToastForBorrowed() {
@@ -243,23 +252,17 @@ export default class SearchBooks extends LightningElement {
     }
 
     handleSearch(event){
-        this.searchValue = event.target.value;
+        //this.searchValue = event.target.value;
         if(this.value===null){
             this.showErrorToastForChooseByField();   
         }
         else{
-            getBookById({
-                searchBy:this.value,
-                searchKey: this.searchValue
-            })
-            .then(result => {
-                this.record = result;
-                this.recordLength = this.record.length;
-            })
-            .catch(error=>{
-                this.error = error.message;
-                console.log(this.error);
-            });
+
+            window.clearTimeout(this.delayTimeout);
+            const searchKey = event.target.value;
+            this.delayTimeout = setTimeout(() => {
+                this.searchValue = searchKey;
+            }, 300);
         }
     }
 
@@ -338,15 +341,30 @@ export default class SearchBooks extends LightningElement {
 
     connectedCallback(){
         this.getBorrowedBooksCount();
-        console.log(this.borrowedCount);
-        console.log(this.loggedInUserId);
         if(this.loggedInUserId==='0055g00000AoQaDAAV'){
             this.isLibrarin=true;
         }
-        getBooks()
-        .then(result =>{
-            this.record = result;
-            this.recordLength = this.record.length;
-        })
     }
 }
+
+//#region commended lines
+
+// getBookById({
+            //     searchBy:this.value,
+            //     searchKey: this.searchValue
+            // })
+            // .then(result => {
+            //     this.record = result;
+            //     this.recordLength = this.record.length;
+            // })
+            // .catch(error=>{
+            //     this.error = error.message;
+            //     console.log(this.error);
+            // });
+ // getBooks()
+        // .then(result =>{
+        //     this.record = result;
+        //     this.recordLength = this.record.length;
+        // })
+
+//#endregion

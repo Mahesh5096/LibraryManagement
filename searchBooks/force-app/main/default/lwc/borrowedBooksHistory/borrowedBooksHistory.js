@@ -27,6 +27,7 @@ export default class BorrowedBooksHistory extends LightningElement {
     wireddataResult;
     recordLength=0;
 
+    //Get logged in user details.
     @wire(getRecord, {
         recordId: USER_ID,
         fields: [USER_NAME]
@@ -51,6 +52,7 @@ export default class BorrowedBooksHistory extends LightningElement {
         }
     }
 
+    //get Books
     @wire(getBookByIdSOSL,{userId:'$loggedInUserId',searchKey:'$searchKey'}) wiredbooks(result){
         this.wireddataResult = result;
         if(result.data){
@@ -63,6 +65,7 @@ export default class BorrowedBooksHistory extends LightningElement {
     }
     
     handleSearch(event){
+        //debouncing concept
         window.clearTimeout(this.delayTimeout);
         const searchKey = event.target.value;
         this.delayTimeout = setTimeout(() => {
