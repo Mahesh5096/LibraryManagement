@@ -21,10 +21,6 @@ const columns = [
 
 export default class ReturnBooks extends LightningElement {
     bookId;
-    BorrowId;
-    Author;
-    BookName;
-    borrowedBy;
     loggedInUserId=USER_ID;
     loggedInUserName;
     columns = columns;
@@ -65,6 +61,12 @@ export default class ReturnBooks extends LightningElement {
         return refreshApex(this.wireddataResult);
     }
 
+    get dynamicGreetings(){
+        if(this.loggedInUserName!=undefined){
+            return `Hello ${this.loggedInUserName.toUpperCase()}!`;
+        }
+    }
+
     showSuccessToastForReturned() {
         const event = new ShowToastEvent({
             title: 'Return Success',
@@ -92,50 +94,38 @@ export default class ReturnBooks extends LightningElement {
                 borrowerId:this.loggedInUserId
             })
             .then(result => {
-                console.log(this.loggedInUserId)
                 refreshApex(this.wireddataResult); 
             })
             .catch(error=>{
                 this.error = error.message;
-                console.log(this.error);
+                console.log('error');
             }
         );
     }
 
     insertAndUpdateBorrowedBooks(){
-        console.log('--->called');
-        console.log(this.bookId);
-        console.log(this.BookStatus);
         insertBorrowedBooks({
-            bid:this.BorrowId,
-            // bookId: this.bookId,
-            // bookName: this.BookName,
-            // author: this.Author ,
-            bookStatus: this.BookStatus
-            // userId: this.loggedInUserId
+            bookId: this.bookId,
+            bookName: '',
+            author: '' ,
+            bookStatus: this.BookStatus,
+            userId: ''
         })
         .then(result =>{
-            console.log('--->borrowedbook'+ result);
+            console.log('--->borrowedbookooks'+ result);
         })
         .catch(error=>{
             console.log('erroresssss');
-            console.log(error);
             this.error = error.message;
-            console.log(this.error);
         })
     }
 
     handleRowSlect(event){
         if (event.detail.selectedRows.length > 0){
-        this.selectedRowId = event.detail.selectedRows[0].Id;
-        this.BorrowId = event.detail.selectedRows[0].Name;
-        console.log('---> handle row select'+this.selectedRowId);
-        this.BookStatus = event.detail.selectedRows[0].Book_Status__c;
-        this.bookId = event.detail.selectedRows[0].Name;
-        this.BookName = event.detail.selectedRows[0].Book_Name__c;
-        this.Author = event.detail.selectedRows[0].Author__c
-        this.borrowedBy = event.detail.selectedRows[0].Borrowed_Id__c;
-        this.isRowSelected = true;  
+            this.selectedRowId = event.detail.selectedRows[0].Id;
+            this.BookStatus = event.detail.selectedRows[0].Book_Status__c;
+            this.bookId = event.detail.selectedRows[0].Name;
+            this.isRowSelected = true;  
         }
     }
 

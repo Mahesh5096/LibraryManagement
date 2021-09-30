@@ -57,6 +57,7 @@ export default class BorrowedBooksHistory extends LightningElement {
         this.wireddataResult = result;
         if(result.data){
             this.record = result.data;
+            console.log(result.data.Returned_date__c);
             this.recordLength = this.record.length;
         }
         console.log('-->wire')

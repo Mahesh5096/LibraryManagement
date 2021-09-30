@@ -54,8 +54,8 @@ export default class SearchBooks extends LightningElement {
     loggedInUserName;
     columns = columns;
     record;
-    recordLength=0;
-    searchValue;
+    recordLength = 0;
+    searchValue = '';
     error;
     data;
     value = null;
@@ -92,7 +92,7 @@ export default class SearchBooks extends LightningElement {
 //#region Get the Books using refresh apex
     @wire(getBookById,{searchBy:'$value',searchKey:'$searchValue'}) wiredBooks(result){
         this.wireddataResult = result;
-        console.log(this.wireddataResult)
+        console.log(result.data);
         if(result.data){
             this.record = result.data;
             this.recordLength = this.record.length;

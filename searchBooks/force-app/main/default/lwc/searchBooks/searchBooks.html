@@ -1,44 +1,84 @@
 <template>
-    <lightning-card  title={dynamicGreetings} icon-name="standard:search" >
+    <lightning-card  
+        title={dynamicGreetings} 
+        icon-name="standard:search" >
         <template if:true={isLibrarin}>
-            <lightning-radio-group slot="actions" name="radioGroup" label="Search By" 
-                options={options1} value={value} type="button" onchange={handleChange} required>
+            <lightning-radio-group 
+                slot="actions" 
+                name="radioGroup" 
+                label="Search By" 
+                options={options1} 
+                value={value} 
+                type="button" 
+                onchange={handleChange} 
+                required>
             </lightning-radio-group>
         </template>
         <template if:false={isLibrarin}>
-            <lightning-radio-group slot="actions" name="radioGroup" label="Search By" 
-                options={options} value={value} type="button" onchange={handleChange} required>
+            <lightning-radio-group 
+                slot="actions" 
+                name="radioGroup" 
+                label="Search By" 
+                options={options} 
+                value={value} 
+                type="button" 
+                onchange={handleChange} 
+                required>
             </lightning-radio-group>
         </template>
-        <lightning-input slot="actions" type="search" name="search" onchange={handleSearch} placeholder="Search for books">
+        <lightning-input 
+            slot="actions" 
+            type="search" 
+            name="search" 
+            onchange={handleSearch} 
+            placeholder="Search for books">
         </lightning-input>
         <template if:false={isLibrarin}>
-            <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color:rgb(22, 50, 92);" >
+            <div 
+                class="slds-p-around_medium lgc-bg-inverse" 
+                style="text-align: center; background-color:rgb(22, 50, 92);" >
                 <lightning-button-group >
-                    <lightning-button  label="Borrow"  onclick={handleBorrowClick} variant="inverse" ></lightning-button>
-                    <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>
+                    <lightning-button  
+                        label="Borrow"  
+                        onclick={handleBorrowClick} 
+                        variant="inverse" >
+                    </lightning-button>
+                    <lightning-button  
+                        label="Return"  
+                        onclick={handleReturnClick} 
+                        variant="inverse" >
+                    </lightning-button>
                 </lightning-button-group>
             </div>
         </template>
         <lightning-datatable 
-            data={record} columns={columns} key-field="Name" sorted-by={sortBy} 
+            data={record} 
+            columns={columns} 
+            key-field="Name" 
+            sorted-by={sortBy} 
             sorted-direction={sortDirection} 
             max-row-selection="1"
-            onsort={doSorting} onrowselection={handleRowSlect}>
+            onsort={doSorting} 
+            onrowselection={handleRowSlect}>
         </lightning-datatable>
         <template if:false={recordLength}>
-        <div style="text-align: center;">
-            <div class="slds-var-p-around_large">
-                <img src="https://tse3.mm.bing.net/th/id/OIP.kOaSZ1k00CNgSVYFfH31AgAAAA?pid=ImgDet&rs=1" class="logo" alt="Company logo" />
-                <!-- <p class="slds-var-p-around_small">No books found</p> -->
-            </div>
-        </div>
+            <c-placeholder></c-placeholder>
         </template> 
         <template if:false={isLibrarin}>
-            <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color: rgb(22, 50, 92);" >
+            <div 
+                class="slds-p-around_medium lgc-bg-inverse" 
+                style="text-align: center; background-color: rgb(22, 50, 92);" >
                 <lightning-button-group >
-                    <lightning-button  label="Borrow"  onclick={handleBorrowClick} variant="inverse" ></lightning-button>
-                    <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>
+                    <lightning-button  
+                        label="Borrow"  
+                        onclick={handleBorrowClick} 
+                        variant="inverse" >
+                    </lightning-button>
+                    <lightning-button  
+                        label="Return"  
+                        onclick={handleReturnClick} 
+                        variant="inverse" >
+                    </lightning-button>
                 </lightning-button-group>
             </div>
         </template>

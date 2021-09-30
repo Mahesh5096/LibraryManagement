@@ -1,21 +1,23 @@
 <template>
-    <lightning-card>
-        <h1 slot="title">Borrowed Book for {loggedInUserName}</h1>
-        <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color: rgb(22, 50, 92);" >
-            <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>
-            </div>
+    <lightning-card title={dynamicGreetings}>
+        <div 
+            class="slds-p-around_medium lgc-bg-inverse" 
+            style="text-align: center; background-color: rgb(22, 50, 92);" >
+            <lightning-button  
+                label="Return"  
+                onclick={handleReturnClick} 
+                variant="inverse" >
+            </lightning-button>
+        </div>
         <lightning-datatable 
-            data={record} columns={columns} key-field="Id" 
+            data={record} 
+            columns={columns} 
+            key-field="Id" 
             max-row-selection="1"
             onrowselection={handleRowSlect}>
         </lightning-datatable>
         <template if:false={recordLength}>
-            <div style="text-align: center;">
-                <div class="slds-var-p-around_large">
-                    <img src="https://tse3.mm.bing.net/th/id/OIP.kOaSZ1k00CNgSVYFfH31AgAAAA?pid=ImgDet&rs=1" class="logo" alt="Company logo" />
-                    <!-- <p class="slds-var-p-around_small">No books found</p> -->
-                </div>
-            </div>
+            <c-placeholder></c-placeholder>
         </template> 
         <div class="slds-p-around_medium lgc-bg-inverse" style="text-align: center; background-color: rgb(22, 50, 92);" >
         <lightning-button  label="Return"  onclick={handleReturnClick} variant="inverse" ></lightning-button>

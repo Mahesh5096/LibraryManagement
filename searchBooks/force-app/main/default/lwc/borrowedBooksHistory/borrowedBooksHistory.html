@@ -1,29 +1,28 @@
 <template>
-    <lightning-card title={dynamicGreeting}>
-        <div class="slds-card__body_inner">
-            <lightning-input type="search" variant="label-hidden"
-            class="slds-var-m-bottom_small"
-            label="Search"
-            placeholder="Search for borrowed books" 
-            name="search" 
-            onchange={handleSearch} >
+    <lightning-card 
+        title={dynamicGreeting}>
+        <div 
+            class="slds-card__body_inner">
+            <lightning-input 
+                type="search" 
+                variant="label-hidden"
+                class="slds-var-m-bottom_small"
+                label="Search"
+                placeholder="Search for borrowed books" 
+                name="search" 
+                onchange={handleSearch} >
             </lightning-input>
             <lightning-datatable
-            data={record} 
-            columns={columns} 
-            key-field="Name" 
-            sorted-by={sortBy} 
-            sorted-direction={sortDirection} 
-            hide-checkbox-column="true" 
-            onsort={doSorting} >
+                data={record} 
+                columns={columns} 
+                key-field="Name" 
+                sorted-by={sortBy} 
+                sorted-direction={sortDirection} 
+                hide-checkbox-column="true" 
+                onsort={doSorting} >
             </lightning-datatable>
             <template if:false={recordLength}>
-            <div style="text-align: center;">
-                <div class="slds-var-p-around_large">
-                    <img src="https://tse3.mm.bing.net/th/id/OIP.kOaSZ1k00CNgSVYFfH31AgAAAA?pid=ImgDet&rs=1" class="logo" alt="Company logo" />
-                    <!-- <p class="slds-var-p-around_small">No books found</p> -->
-                </div>
-            </div>
+                <c-placeholder></c-placeholder>
             </template>
         </div>
     </lightning-card>
